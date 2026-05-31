@@ -1,73 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My WhatsApp Links</title>
+<title>MyCredit Loan Service</title>
 
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
 body{
-    background:#111;
-    font-family:Arial;
-    color:white;
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
     text-align:center;
-    margin:0;
+}
+
+.banner{
+    width:100%;
+    max-width:800px;
+    display:block;
+    margin:auto;
+}
+
+.content{
     padding:20px;
 }
 
-/* 顶部图片 */
-.banner{
-    width:100%;
-    max-width:420px;
-    border-radius:12px;
-    margin:20px auto;
-    display:block;
-}
-
-/* 标题 */
 h1{
-    margin-top:10px;
-    margin-bottom:25px;
+    color:#003366;
+    margin-bottom:10px;
 }
 
-/* WhatsApp按钮 */
-.button{
+.subtitle{
+    color:#666;
+    margin-bottom:25px;
+    font-size:16px;
+}
+
+.benefits{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:25px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.benefits h2{
+    color:#003366;
+    margin-bottom:15px;
+}
+
+.benefits ul{
+    list-style:none;
+    text-align:left;
+    max-width:500px;
+    margin:auto;
+}
+
+.benefits li{
+    padding:8px 0;
+    font-size:16px;
+}
+
+.whatsapp-container{
+    margin-top:20px;
+}
+
+.wa-btn{
     display:block;
-    width:260px;
-    margin:15px auto;
+    width:85%;
+    max-width:400px;
+    margin:18px auto;
     padding:18px;
     background:#25D366;
     color:white;
     text-decoration:none;
-    border-radius:12px;
-    font-size:18px;
+    font-size:20px;
     font-weight:bold;
+    border-radius:50px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    animation:pulse 1.5s infinite;
 }
 
-.button:hover{
-    background:#1ebe5d;
+@keyframes pulse{
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.08);
+    }
+
+    100%{
+        transform:scale(1);
+    }
 }
 
+.footer{
+    margin-top:30px;
+    padding:20px;
+    color:#666;
+    font-size:14px;
+}
 </style>
-</head>
 
+</head>
 <body>
 
-<!-- 🔥 顶部图片（广告图 / 海报） -->
-<img class="banner" src="bannerV2.png" alt="Banner">
+<img src="bannerV2.png" alt="MyCredit Banner" class="banner">
 
-<h1>For Loan Enquiries, Please Click WhatsApp Link Below:</h1>
+<div class="content">
 
-<!-- WhatsApp Links -->
-<a class="button" href="https://wa.me/60122628995">WhatsApp Link 1</a>
+    <h1>MyCredit</h1>
 
-<a class="button" href="https://wa.me/60122628995">WhatsApp Link 2</a>
+    <p class="subtitle">
+        快速 · 簡單 · 專業
+    </p>
 
-<a class="button" href="https://wa.me/60122628995">WhatsApp Link 3</a>
+    <div class="benefits">
 
-<a class="button" href="https://wa.me/60122628995">WhatsApp Link 4</a>
+        <h2>選擇 MyCredit 的好處</h2>
+
+        <ul>
+            <li>✅ 最快當天批核</li>
+            <li>✅ 文件簡單，申請方便</li>
+            <li>✅ 利率透明，無隱藏收費</li>
+            <li>✅ 專業顧問一對一服務</li>
+            <li>✅ 保護客戶資料隱私</li>
+            <li>✅ 合法合規貸款方案</li>
+            <li>✅ 多種還款方案可選</li>
+            <li>✅ 免費諮詢，不收申請費</li>
+        </ul>
+
+    </div>
+
+    <div class="whatsapp-container">
+
+        <a href="https://wa.me/60122628995" class="wa-btn">
+            📱 WhatsApp Customer Service 1
+        </a>
+
+        <a href="https://wa.me/60122628995" class="wa-btn">
+            📱 WhatsApp Customer Service 2
+        </a>
+
+    </div>
+
+</div>
+
+<div class="footer">
+
+    <p>Need Extra Cash Flow?</p>
+    <p>Perlukan Dana Tambahan?</p>
+    <p>需要資金周轉？</p>
+
+</div>
 
 </body>
 </html>
