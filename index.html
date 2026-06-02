@@ -6,7 +6,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>MyCredit Loan Service</title>
+<script>
+async function loadWA() {
+  const res = await fetch('/config.json');
+  const data = await res.json();
 
+  document.getElementById("btn1").href =
+    "https://wa.me/" + data.whatsapp1;
+
+  document.getElementById("btn2").href =
+    "https://wa.me/" + data.whatsapp2;
+}
+
+loadWA();
+</script>
 <style>
 *{
     margin:0;
@@ -120,11 +133,11 @@ h1{
 
     <div class="whatsapp-container">
 
-        <a href="https://wa.me/60122628995" class="wa-btn">
+        <a id="btn1" href="#" class="wa-btn">
             📱 WhatsApp Customer Service 1
         </a>
 
-        <a href="https://wa.me/60122628995" class="wa-btn">
+        <a id="btn2" href="#" class="wa-btn">
             📱 WhatsApp Customer Service 2
         </a>
 
