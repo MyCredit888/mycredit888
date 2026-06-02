@@ -34,13 +34,19 @@ button{
   color:white;
   border-radius:5px;
   cursor:pointer;
+  margin:5px;
 }
 
 #panel{
-  display:none;   /* 🔒 默认隐藏后台 */
+  display:none;
+}
+
+.logout{
+  background:#ff4d4d;
 }
 </style>
 </head>
+
 <body>
 
 <div class="box">
@@ -54,7 +60,7 @@ button{
   <button onclick="login()">Login</button>
 </div>
 
-<!-- 🔒 ONLY AFTER LOGIN -->
+<!-- 🔒 PANEL -->
 <div id="panel">
 
   <h3>WhatsApp Settings</h3>
@@ -63,6 +69,7 @@ button{
   <input id="num2" placeholder="WhatsApp 2"><br>
 
   <button onclick="save()">Save</button>
+  <button class="logout" onclick="logout()">Logout</button>
 
 </div>
 
@@ -70,8 +77,19 @@ button{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* 🔥 Firebase config */
 const firebaseConfig = {
@@ -84,42 +102,76 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+/* ===================== */
 /* 🔐 LOGIN */
-window.login = function () {
-  signInWithEmailAndPassword(
-    auth,
-    email.value,
-    password.value
-  ).then(() => {
+/* ===================== */
+window.login = async function () {
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      email.value,
+      password.value
+    );
     alert("Login success");
-  }).catch(e => alert(e.message));
-}
+  } catch (e) {
+    alert(e.message);
+  }
+};
 
-/* 👁️ detect login state */
-onAuthStateChanged(auth, (user) => {
+/* ===================== */
+/* 🚪 LOGOUT */
+/* ===================== */
+window.logout = async function () {
+  try {
+    await signOut(auth);
+    alert("Logged out");
+  } catch (e) {
+    alert(e.message);
+  }
+};
+
+/* ===================== */
+/* 👁 AUTH STATE CONTROL */
+/* ===================== */
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("panel").style.display = "block";
-    loadData();
+
+    await loadData();
   } else {
     document.getElementById("loginBox").style.display = "block";
     document.getElementById("panel").style.display = "none";
   }
 });
 
-/* 💾 save */
+/* ===================== */
+/* 💾 SAVE DATA */
+/* ===================== */
 window.save = async function () {
+  try {
 
-  await auth.currentUser.getIdToken(true);
-  await setDoc(doc(db, "setting", "whatsapp"), {
-    number1: num1.value,
-    number2: num2.value
-  });
+    // 🔥 optional safety refresh
+    if (auth.currentUser) {
+      await auth.currentUser.getIdToken(true);
+    }
 
-  alert("Saved!");
-}
+    await setDoc(doc(db, "setting", "whatsapp"), {
+      number1: num1.value,
+      number2: num2.value
+    });
 
-/* 📥 load */
+    alert("Saved!");
+
+  } catch (e) {
+    console.error(e);
+    alert(e.message);
+  }
+};
+
+/* ===================== */
+/* 📥 LOAD DATA */
+/* ===================== */
 async function loadData() {
   const snap = await getDoc(doc(db, "setting", "whatsapp"));
 
