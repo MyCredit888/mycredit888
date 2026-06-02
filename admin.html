@@ -109,6 +109,8 @@ onAuthStateChanged(auth, (user) => {
 
 /* 💾 save */
 window.save = async function () {
+
+  await auth.currentUser.getIdToken(true);
   await setDoc(doc(db, "setting", "whatsapp"), {
     number1: num1.value,
     number2: num2.value
