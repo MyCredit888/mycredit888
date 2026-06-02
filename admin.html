@@ -15,7 +15,7 @@ body{
 .box{
   background:white;
   padding:20px;
-  max-width:400px;
+  max-width:420px;
   margin:auto;
   border-radius:10px;
   box-shadow:0 5px 15px rgba(0,0,0,0.1);
@@ -35,37 +35,45 @@ button{
   border-radius:5px;
   cursor:pointer;
 }
+
+#panel{
+  display:none;   /* 🔒 默认隐藏后台 */
+}
 </style>
 </head>
 <body>
 
 <div class="box">
 
-<h2>Admin Login</h2>
+<h2>Admin Panel</h2>
 
+<!-- 🔐 LOGIN -->
 <div id="loginBox">
   <input id="email" placeholder="Email"><br>
   <input id="password" type="password" placeholder="Password"><br>
   <button onclick="login()">Login</button>
 </div>
 
-<hr>
+<!-- 🔒 ONLY AFTER LOGIN -->
+<div id="panel">
 
-<h2>Update WhatsApp</h2>
+  <h3>WhatsApp Settings</h3>
 
-<input id="num1" placeholder="WhatsApp 1"><br>
-<input id="num2" placeholder="WhatsApp 2"><br>
+  <input id="num1" placeholder="WhatsApp 1"><br>
+  <input id="num2" placeholder="WhatsApp 2"><br>
 
-<button onclick="save()">Save</button>
+  <button onclick="save()">Save</button>
+
+</div>
 
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 换成你的 Firebase config */
+/* 🔥 Firebase config */
 const firebaseConfig = {
   apiKey: "AIzaSyCY1QzAMI5O3oqnf_l7rKLfprR2hJrpFfA",
   authDomain: "mycr-443cc.firebaseapp.com",
@@ -76,7 +84,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* 🔐 login */
+/* 🔐 LOGIN */
 window.login = function () {
   signInWithEmailAndPassword(
     auth,
@@ -84,11 +92,22 @@ window.login = function () {
     password.value
   ).then(() => {
     alert("Login success");
-    loadData();
   }).catch(e => alert(e.message));
 }
 
-/* 💾 save numbers */
+/* 👁️ detect login state */
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("panel").style.display = "block";
+    loadData();
+  } else {
+    document.getElementById("loginBox").style.display = "block";
+    document.getElementById("panel").style.display = "none";
+  }
+});
+
+/* 💾 save */
 window.save = async function () {
   await setDoc(doc(db, "setting", "whatsapp"), {
     number1: num1.value,
@@ -98,7 +117,7 @@ window.save = async function () {
   alert("Saved!");
 }
 
-/* 📥 load existing numbers */
+/* 📥 load */
 async function loadData() {
   const snap = await getDoc(doc(db, "setting", "whatsapp"));
 
