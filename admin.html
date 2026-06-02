@@ -1,36 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel</title>
+<meta charset="UTF-8">
+<title>MyCredit Admin</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f4f4f4;
+  text-align:center;
+  padding:40px;
+}
+
+.box{
+  background:white;
+  padding:20px;
+  max-width:400px;
+  margin:auto;
+  border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+input{
+  width:90%;
+  padding:10px;
+  margin:10px 0;
+}
+
+button{
+  padding:10px 20px;
+  background:#25D366;
+  border:none;
+  color:white;
+  border-radius:5px;
+  cursor:pointer;
+}
+</style>
 </head>
 <body>
 
+<div class="box">
+
 <h2>Admin Login</h2>
 
-<input id="email" placeholder="Email">
-<br><br>
-<input id="password" type="password" placeholder="Password">
-<br><br>
-<button onclick="login()">Login</button>
+<div id="loginBox">
+  <input id="email" placeholder="Email"><br>
+  <input id="password" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+</div>
 
 <hr>
 
-<h2>Update WhatsApp Numbers</h2>
+<h2>Update WhatsApp</h2>
 
-<input id="num1" placeholder="Number 1">
-<br><br>
-<input id="num2" placeholder="Number 2">
-<br><br>
+<input id="num1" placeholder="WhatsApp 1"><br>
+<input id="num2" placeholder="WhatsApp 2"><br>
 
 <button onclick="save()">Save</button>
+
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 这里换成你的 Firebase config */
+/* 🔥 换成你的 Firebase config */
 const firebaseConfig = {
   apiKey: "AIzaSyCY1QzAMI5O3oqnf_l7rKLfprR2hJrpFfA",
   authDomain: "mycr-443cc.firebaseapp.com",
@@ -41,7 +76,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* 登录 */
+/* 🔐 login */
 window.login = function () {
   signInWithEmailAndPassword(
     auth,
@@ -53,9 +88,9 @@ window.login = function () {
   }).catch(e => alert(e.message));
 }
 
-/* 保存号码 */
+/* 💾 save numbers */
 window.save = async function () {
-  await setDoc(doc(db, "settings", "whatsapp"), {
+  await setDoc(doc(db, "setting", "whatsapp"), {
     number1: num1.value,
     number2: num2.value
   });
@@ -63,9 +98,9 @@ window.save = async function () {
   alert("Saved!");
 }
 
-/* 读取现有号码 */
+/* 📥 load existing numbers */
 async function loadData() {
-  const snap = await getDoc(doc(db, "settings", "whatsapp"));
+  const snap = await getDoc(doc(db, "setting", "whatsapp"));
 
   if (snap.exists()) {
     num1.value = snap.data().number1;
